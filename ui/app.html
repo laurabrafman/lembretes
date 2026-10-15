@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR" data-tema="pixel">
+<head>
+<meta charset="utf-8">
+<title>Lembretes</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<!-- troca exata tinta↔papel nas imagens (personagem e visitantes) no modo escuro -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="inverte" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="-1 0 0 0 1.157  0 -1 0 0 1.180  0 0 -1 0 1.016  0 0 0 1 0"/>
+  </filter>
+</svg>
+<script src="icones.js"></script>
+<script src="app.js"></script>
+<script src="visitantes.js"></script>
+</body>
+</html>

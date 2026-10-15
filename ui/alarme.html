@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR" data-tema="pixel">
+<head>
+<meta charset="utf-8">
+<title>Lembrete</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  html, body { background: transparent; overflow: hidden; }
+  body { padding: 8px 16px 16px 8px; }   /* espaço para a sombra dura */
+
+  .janela {
+    position: relative; height: 100%; display: flex; flex-direction: column;
+    background: var(--paper); border: var(--borda); box-shadow: 8px 8px 0 var(--ink);
+  }
+  .corpo { flex: 1; display: flex; flex-direction: column; padding: 16px 24px 16px; min-height: 0; }
+
+  .topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; height: 26px; padding: 0 10px; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 600; }
+  .ponto { width: 8px; height: 8px; background: var(--paper); animation: pisca-ponto 1s steps(1) infinite; }
+  @keyframes pisca-ponto { 50% { opacity: 0; } }
+  .silencio .ponto { animation: none; opacity: .4; }
+  .data { font-size: 13px; color: var(--ink-soft); text-transform: capitalize; }
+
+  /* personagem + horário lado a lado */
+  .cena { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
+  .palco { position: relative; flex: none; width: 136px; padding: 4px; border: var(--borda); background:
+    radial-gradient(color-mix(in srgb, var(--ink) 22%, transparent) 1px, transparent 1.4px) 0 0 / 8px 8px; }
+  .sprite { width: 128px; height: 128px; background-size: 100% 100%; background-repeat: no-repeat; image-rendering: pixelated; filter: var(--sprite-filtro); }
+  .sprite[data-estado="parada"] { background-image: url("sprites/parada.png"); animation: piscar 4.4s steps(1) infinite; }
+  .sprite[data-estado="sorrindo"] { background-image: url("sprites/sorrindo.png"); }
+  @keyframes piscar {
+    0%, 92% { background-image: url("sprites/parada.png"); }
+    93%, 96% { background-image: url("sprites/piscando.png"); }
+    97%, 100% { background-image: url("sprites/parada.png"); }
+  }
+  .quando { min-width: 0; }
+  .hora { font-family: var(--pixel); font-size: 66px; line-height: 1; }
+  .msg { font-family: var(--pixel); font-size: 22px; line-height: 1.3; margin-top: 8px; overflow-wrap: anywhere; }
+  .det { font-size: 14px; color: var(--ink-soft); margin-top: 4px; }
+
+  .mantra {
+    margin-top: 16px; padding: 12px 14px; border: 2px dashed var(--ink);
+    font-family: var(--pixel); font-size: 22px; line-height: 1.35; text-align: center;
+  }
+
+  /* tarefa */
+  .tarefa { margin-top: 16px; padding: 14px 16px; border: var(--borda); text-align: center; }
+  .tarefa:empty { display: none; }
+  .hint { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .aviso { font-size: 13px; color: var(--ink-soft); margin-top: 8px; min-height: 20px; }
+  .aviso.erro { color: var(--ink); font-weight: 600; }
+  .aviso.erro::before { content: "! "; }
+  .inp {
+    width: 100%; height: 46px; margin-top: 12px; padding: 0 12px; border: var(--borda); border-radius: 0; outline: none;
+    background-color: var(--paper); color: var(--ink); text-align: center; font-family: var(--mono); font-size: 18px;
+  }
+  .inp:focus {
+    border-color: transparent;
+    background-image:
+      linear-gradient(90deg, var(--ink) 50%, transparent 50%), linear-gradient(90deg, var(--ink) 50%, transparent 50%),
+      linear-gradient(0deg, var(--ink) 50%, transparent 50%), linear-gradient(0deg, var(--ink) 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    animation: formigas .8s steps(4) infinite;
+  }
+  textarea.inp { height: 100px; padding: 10px 12px; text-align: left; font-size: 14px; line-height: 1.55; resize: none; }
+  .treme { animation: treme .3s steps(4); }
+  @keyframes treme { 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+
+  .dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+  .dots i { width: 14px; height: 14px; border: var(--borda); }
+  .dots i.on { background: var(--ink); }
+  .expr { font-family: var(--pixel); font-size: 33px; margin-top: 10px; line-height: 1.1; }
+
+  .frase { font-family: var(--pixel); font-size: 22px; line-height: 1.45; margin-top: 10px; }
+  .frase span { color: var(--ink-soft); opacity: .55; }
+  .frase span.ok { color: var(--ink); opacity: 1; }            /* letra acendendo */
+  .frase span.no { color: var(--paper); background: var(--ink); opacity: 1; }
+  .frase span.cur { box-shadow: inset 2px 0 0 var(--ink); opacity: 1; }
+
+  .pergunta { font-family: var(--pixel); font-size: 22px; line-height: 1.35; margin-top: 10px; }
+  .contador { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--ink-soft); }
+  .barra { flex: 1; height: 10px; border: var(--borda); }
+  .barra i { display: block; height: 100%; width: 0; background: var(--ink); }
+
+  .anel { position: relative; width: 150px; height: 150px; margin: 12px auto 0; display: grid; place-items: center; }
+  .anel svg { position: absolute; inset: 0; transform: rotate(-90deg); shape-rendering: crispEdges; }
+  .anel circle { fill: none; stroke-width: 8; }
+  .anel .fundo { stroke: var(--ink); stroke-dasharray: 4 6; opacity: .45; }
+  .anel .prog { stroke: var(--ink); stroke-dasharray: 427; stroke-dashoffset: 427; }
+  .segura {
+    width: 104px; height: 104px; display: grid; place-content: center; text-align: center;
+    background: var(--ink); color: var(--paper); border: var(--borda); box-shadow: var(--sombra);
+    font-family: var(--pixel); font-size: 22px; position: relative; top: 0; left: 0;
+  }
+  .segura.on { top: 3px; left: 3px; box-shadow: none; }
+  .segura small { display: block; font-family: var(--mono); font-size: 13px; margin-top: 2px; }
+
+  /* rodapé */
+  .foot { display: flex; gap: 12px; margin-top: auto; padding-top: 16px; }
+  .b {
+    flex: 1; height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: var(--borda); background: var(--paper); box-shadow: var(--sombra); font-size: 15px; font-weight: 600;
+    position: relative; top: 0; left: 0;
+  }
+  .b:active { top: 3px; left: 3px; box-shadow: none; }
+  .b svg { width: 16px; height: 16px; }
+  .b-main { background: var(--ink); color: var(--paper); }
+  .b:disabled { opacity: .45; pointer-events: none; }
+  .adiar-opcoes { display: flex; align-items: center; gap: 8px; width: 100%; }
+  .adiar-t { font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
+  .b-link { flex: 0 0 auto; padding: 0 10px; border-color: transparent; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
+  .pular { align-self: center; margin-top: 10px; font-size: 13px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; padding: 2px 6px; }
+  .pular:hover { color: var(--ink); }
+
+  /* concluído */
+  .feito { position: absolute; inset: 26px 0 0; display: none; place-items: center; text-align: center; z-index: 5; background: var(--paper); border-top: var(--borda); }
+  .feito.on { display: grid; animation: aparece .3s steps(3); }
+  @keyframes aparece { from { opacity: 0; } }
+  .feito .palco { margin: 0 auto; }
+  .feito h2 { font-family: var(--pixel); font-size: 33px; font-weight: 400; margin-top: 18px; }
+  .feito p { color: var(--ink-soft); margin-top: 6px; }
+</style>
+</head>
+<body>
+<!-- troca exata tinta↔papel nas imagens da personagem, usada no modo escuro -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="inverte" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="-1 0 0 0 1.157  0 -1 0 0 1.180  0 0 -1 0 1.016  0 0 0 1 0"/>
+  </filter>
+</svg>
+
+<div class="janela" id="card">
+  <div class="winbar pywebview-drag-region"><span class="winbar-t">Lembrete</span></div>
+  <div class="corpo">
+    <div class="topo"><span class="pill"><i class="ponto"></i>Você recebeu um lembrete</span><span class="data" id="data"></span></div>
+    <div class="cena">
+      <div class="palco"><div class="sprite" id="personagem" data-estado="parada" role="img" aria-label="Personagem"></div></div>
+      <div class="quando">
+        <div class="hora num" id="hora"></div>
+        <div class="msg" id="msg"></div>
+        <div class="det" id="det"></div>
+      </div>
+    </div>
+    <div class="mantra" id="mantra"></div>
+    <div class="tarefa" id="tarefa"></div>
+    <div class="foot" id="foot"></div>
+    <button class="pular" id="pular">pular desta vez</button>
+  </div>
+  <div class="feito" id="feito">
+    <div>
+      <div class="palco"><div class="sprite" data-estado="sorrindo" role="img" aria-label="Personagem sorrindo"></div></div>
+      <h2 id="feito-t">Mandou bem!</h2>
+      <p id="feito-p">Alarme desligado.</p>
+    </div>
+  </div>
+</div>
+<script src="icones.js"></script>
+<script src="alarme.js"></script>
+</body>
+</html>

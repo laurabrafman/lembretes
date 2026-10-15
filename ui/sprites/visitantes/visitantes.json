@@ -1,0 +1,126 @@
+{
+  "_como_usar": "Cada visitante tem uma pasta com os quadros (PNG, duas cores, fundo transparente, desenhados olhando para a DIREITA). 'tamanho' é o tamanho do desenho em pixels; 'escala' multiplica (use números inteiros). 'velocidade' é em pixels da tela por segundo. 'trajeto' pode ser: andar_base, voar, pousar_cartao, nadar, saltar_arco, subir_flutuando. 'quadros' lista as animações; cada uma é uma sequência de arquivos que toca a 'fps' quadros por segundo. 'gestos' são animações curtas sorteadas no clique (e às vezes sozinho, quando está parado); um gesto pode ter 'extra': 'coracao' para soltar um coraçãozinho. 'chance_frase' é a chance de, no lugar do gesto, mostrar um balão com uma frase curta dos seus mantras.",
+  "visitantes": [
+    {
+      "nome": "gato",
+      "titulo": "Gatinho",
+      "ativo": true,
+      "pasta": "gato",
+      "tamanho": [
+        24,
+        14
+      ],
+      "escala": 3,
+      "velocidade": 45,
+      "fps": 6,
+      "trajeto": "andar_base",
+      "parada": {
+        "chance": 0.85,
+        "segundos": [
+          5,
+          9
+        ],
+        "acoes": [
+          "piscar",
+          "lamber",
+          "rabo",
+          "piscar_devagar"
+        ]
+      },
+      "quadros": {
+        "andando": [
+          "andando-1.png",
+          "andando-2.png",
+          "andando-3.png",
+          "andando-2.png"
+        ],
+        "parado": [
+          "sentado.png"
+        ],
+        "piscar": [
+          "sentado.png",
+          "piscando.png",
+          "sentado.png"
+        ],
+        "lamber": [
+          "lambendo-1.png",
+          "lambendo-2.png",
+          "lambendo-1.png",
+          "lambendo-2.png",
+          "sentado.png"
+        ],
+        "espreguicar": [
+          "sentado.png",
+          "espreguicar-1.png",
+          "espreguicar-2.png",
+          "espreguicar-1.png",
+          "espreguicar-2.png",
+          "espreguicar-1.png",
+          "sentado.png"
+        ],
+        "rabo": [
+          "rabo-1.png",
+          "sentado.png",
+          "rabo-2.png",
+          "sentado.png",
+          "rabo-1.png",
+          "sentado.png",
+          "rabo-2.png",
+          "sentado.png"
+        ],
+        "piscar_devagar": [
+          "sentado.png",
+          "piscando.png",
+          "piscando.png",
+          "piscando.png",
+          "piscando.png",
+          "sentado.png"
+        ],
+        "rolar": [
+          "sentado.png",
+          "deitado.png",
+          "barriga-1.png",
+          "barriga-2.png",
+          "barriga-1.png",
+          "barriga-2.png",
+          "barriga-1.png",
+          "deitado.png",
+          "sentado.png"
+        ],
+        "coracao": [
+          "sentado.png",
+          "piscando.png",
+          "sentado.png",
+          "sentado.png"
+        ]
+      },
+      "gestos": [
+        {
+          "quadros": "espreguicar",
+          "fps": 4
+        },
+        {
+          "quadros": "rabo",
+          "fps": 5
+        },
+        {
+          "quadros": "piscar_devagar",
+          "fps": 2.5
+        },
+        {
+          "quadros": "rolar",
+          "fps": 4
+        },
+        {
+          "quadros": "coracao",
+          "fps": 3,
+          "extra": "coracao"
+        }
+      ],
+      "chance_frase": 0.25,
+      "extras": {
+        "coracao": "coracao.png"
+      }
+    }
+  ]
+}

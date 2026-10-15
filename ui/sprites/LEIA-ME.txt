@@ -1,0 +1,20 @@
+PERSONAGEM — como trocar pelos seus desenhos
+=============================================
+
+Estes arquivos são PROVISÓRIOS. Desenhe os seus e salve por cima, com os mesmos nomes:
+
+  parada.png         — de olhos abertos, parada (quadro principal)
+  piscando.png       — igual à parada, de olhos fechados (pisca de vez em quando)
+  sorrindo.png       — quando a tarefa é concluída
+  respirando-1.png   — ritmo da respiração do "Pausa" (4 s inspirando, 7 s soltando)
+  respirando-2.png     os 4 quadros tocam em sequência: 1 → 2 → 3 (cheia) → 4 → 1
+  respirando-3.png
+  respirando-4.png
+
+Regras para ficar nítido:
+  • Tamanho: 32×32 px (pode ser 48×48 ou 64×64, desde que TODOS os quadros tenham o mesmo tamanho).
+  • Duas cores só: tinta #3F403B e papel #E8EDC8, e fundo transparente.
+    (No modo escuro o app troca as duas cores automaticamente.)
+  • PNG sem suavização (sem anti-aliasing).
+
+Não precisa mexer em código: basta substituir os arquivos e reabrir o app.

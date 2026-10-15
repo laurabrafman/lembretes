@@ -1,0 +1,133 @@
+/* Jardim em pixel — base: paleta, fontes e componentes.
+   Para trocar a paleta inteira, mude só as 3 cores de :root (e as 3 do modo escuro). */
+
+@font-face { font-family: "Departure Mono"; src: url("fonts/DepartureMono-Regular.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; src: url("fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-style: italic; src: url("fonts/ibm-plex-mono-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; src: url("fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 600; src: url("fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"); }
+
+:root {
+  --paper: #E8EDC8;      /* lima bem pálido */
+  --ink: #3F403B;        /* grafite */
+  --ink-soft: #62665A;   /* intermediário (contraste AA: 4,9:1 sobre o papel) */
+  --pixel: "Departure Mono", ui-monospace, monospace;   /* títulos, horários, rótulos, mantras */
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace; /* texto corrido e campos */
+  --borda: 2px solid var(--ink);
+  --sombra: 3px 3px 0 var(--ink);
+  --sombra-g: 5px 5px 0 var(--ink);
+  /* troca exata tinta↔papel em imagens (sprites) no modo escuro */
+  --sprite-filtro: none;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #3F403B;
+    --ink: #E8EDC8;
+    --ink-soft: #B0B49E; /* 4,9:1 sobre o grafite */
+    --sprite-filtro: url("#inverte");
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--mono); font-size: 14px; line-height: 1.55; color: var(--ink); background: var(--paper);
+  -webkit-font-smoothing: antialiased; -webkit-user-select: none; user-select: none; cursor: default;
+}
+input, textarea, select { -webkit-user-select: text; user-select: text; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: default; }
+svg { display: block; }
+img, .sprite { image-rendering: pixelated; }
+.num { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px dashed var(--ink); outline-offset: 3px; }
+
+/* ---------- janela retrô (barra de título com listras) ---------- */
+.winbar {
+  height: 26px; display: flex; align-items: center; justify-content: center; border-bottom: var(--borda);
+  background: repeating-linear-gradient(180deg, var(--ink) 0 2px, transparent 2px 4px) 6px 6px / calc(100% - 12px) 14px no-repeat;
+}
+.winbar-t { background: var(--paper); padding: 0 10px; font-family: var(--pixel); font-size: 11px; letter-spacing: .04em; line-height: 26px; }
+
+/* ---------- botões ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px;
+  border: var(--borda); border-radius: 2px; background: var(--paper); box-shadow: var(--sombra);
+  font-weight: 600; font-size: 14px; white-space: nowrap; position: relative; top: 0; left: 0;
+}
+.btn:hover { background: color-mix(in srgb, var(--ink) 8%, var(--paper)); }
+.btn:active { top: 3px; left: 3px; box-shadow: none; }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.btn-ghost { box-shadow: none; border-color: transparent; }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn-ghost:active { top: 0; left: 0; }
+.btn-soft { }
+.btn-danger { background: var(--ink); color: var(--paper); }
+.btn:disabled { opacity: .45; pointer-events: none; }
+
+.icon-btn { width: 32px; height: 32px; display: grid; place-items: center; border: 2px solid transparent; color: var(--ink); }
+.icon-btn:hover { border-color: var(--ink); }
+.icon-btn.danger:hover { background: var(--ink); color: var(--paper); }
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* ---------- campos ("formigas marchando" no foco) ---------- */
+.field, .time-input, textarea.field {
+  width: 100%; height: 40px; padding: 0 12px; border: var(--borda); border-radius: 0;
+  background-color: var(--paper); color: var(--ink); font: inherit; font-size: 14px; outline: none;
+}
+textarea.field { height: auto; padding: 10px 12px; resize: none; line-height: 1.55; }
+.field::placeholder, .titulo-input::placeholder, .det-input::placeholder { color: var(--ink-soft); opacity: 1; }
+.field:focus, .time-input:focus, .formigas:focus-within {
+  border-color: transparent;
+  background-image:
+    linear-gradient(90deg, var(--ink) 50%, transparent 50%), linear-gradient(90deg, var(--ink) 50%, transparent 50%),
+    linear-gradient(0deg, var(--ink) 50%, transparent 50%), linear-gradient(0deg, var(--ink) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  animation: formigas .8s steps(4) infinite;
+}
+@keyframes formigas { to { background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px; } }
+select.field { -webkit-appearance: none; appearance: none; padding-right: 34px; }
+.sel { position: relative; display: block; }
+select.field {
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(-45deg, transparent 50%, var(--ink) 50%);
+  background-size: 6px 6px; background-repeat: no-repeat; background-position: right 18px center, right 12px center;
+}
+
+/* ---------- toggle em pixel ---------- */
+.switch { position: relative; width: 40px; height: 22px; flex: none; }
+.switch input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.switch span { position: absolute; inset: 0; border: var(--borda); background: var(--paper); }
+.switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; background: var(--ink); transition: transform .12s steps(3); }
+.switch input:checked + span { background: var(--ink); }
+.switch input:checked + span::after { background: var(--paper); transform: translateX(18px); }
+.switch input:focus-visible + span { outline: 2px dashed var(--ink); outline-offset: 3px; }
+.switch input:disabled + span { opacity: .45; }
+
+/* ---------- controle segmentado ---------- */
+.seg { display: inline-flex; border: var(--borda); box-shadow: var(--sombra); background: var(--paper); }
+.seg button { height: 32px; padding: 0 12px; font-size: 14px; font-weight: 500; border-right: var(--borda); }
+.seg button:last-child { border-right: 0; }
+.seg button:hover { background: color-mix(in srgb, var(--ink) 10%, var(--paper)); }
+.seg button.on { background: var(--ink); color: var(--paper); }
+
+/* ---------- range ---------- */
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; }
+input[type=range]::-webkit-slider-runnable-track {
+  height: 6px; border: var(--borda); background: linear-gradient(to right, var(--ink) var(--p, 50%), var(--paper) var(--p, 50%));
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; margin-top: -7px; background: var(--paper); border: var(--borda); box-shadow: 2px 2px 0 var(--ink);
+}
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { border-left: var(--borda); background: repeating-conic-gradient(var(--ink) 0 25%, transparent 0 50%) 0 0 / 4px 4px; opacity: .2; }
+::-webkit-scrollbar-thumb { background: var(--paper); border: var(--borda); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

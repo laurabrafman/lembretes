@@ -1,0 +1,14 @@
+# dados pessoais de quem usa o app (nunca vão para o repositório)
+data/
+musicas/
+onde_ficam_os_dados.json
+estado.json
+vigia.json
+nao_perturbe_auto.json
+*.log
+
+# coisas do sistema
+__pycache__/
+*.pyc
+.DS_Store
+*.tmp
